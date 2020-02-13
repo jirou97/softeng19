@@ -31,23 +31,11 @@ public class ActualTotalLoadForSpecificDate extends EnergyResource {
         String resolution = getMandatoryAttribute("Resolution", "Resolution is missing");
 
         List<String> resolutionValues = Arrays.asList("PT15M","PT60M","PT30M","P7D","P1M","P1Y","P1D","CONTRACT");
-        //setted in Listener, which is invoked only once.
-        /*
-        dataAccess.setAreaNames();
-        List<String> areaNames = dataAccess.getAreaNames();
-            
-        
-        if (areaNames != null){
-            if (!areaNames.contains(areaName)){
-                //403 error
-                throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,"Bad AreaName value",null);
-            }
-        }
-        */
-        
+                
         if (!resolutionValues.contains(resolution)){
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN,"Bad ResolutionCode value",null);
         }
+        
         //Read the optional date attribute
         String dateParam = getAttributeDecoded("date");
         if (dateParam.length() == 0 ){

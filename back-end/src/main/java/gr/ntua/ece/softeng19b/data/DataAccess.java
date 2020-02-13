@@ -105,7 +105,7 @@ public class DataAccess {
 
     */
     public void resetDB() throws DataAccessException{
-        String sqlQuery = " DELETE FROM actualtotalload WHERE 1 ";
+        String sqlQuery = " DELETE QUICK FROM actualtotalload ";
         try {
             jdbcTemplate.execute(sqlQuery);
         }
