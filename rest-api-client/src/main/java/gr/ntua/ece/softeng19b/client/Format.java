@@ -191,9 +191,6 @@ public enum Format implements ResponseBodyProcessor {
             throws IOException {
         List<ATLRecordForSpecificDay> result = new ArrayList<>();
         reader.beginArray();
-        if (!reader.hasNext()){
-            return result;
-        }
         while(reader.hasNext()) {
             result.add(readActualDataLoadRecordForSpecificDay(reader));
         }

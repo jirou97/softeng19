@@ -1,13 +1,13 @@
 package gr.ntua.ece.softeng19b.api;
-
 import gr.ntua.ece.softeng19b.api.resource.*;
+
+import org.restlet.engine.application.CorsFilter;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.Method;
-import org.restlet.engine.application.CorsFilter;
 import org.restlet.routing.Router;
-
 import java.util.Set;
+//import org.restlet.routing.Template;
 
 public class RestfulApp extends Application {
 
@@ -15,23 +15,11 @@ public class RestfulApp extends Application {
     public synchronized Restlet createInboundRoot() {
 
         Router router = new Router(getContext());
+        
 
-        //Perform a heath check
+
         router.attach("/HealthCheck", HealthCheck.class);
-        //Init a new (empty) database with the default Admin user (username: admin, password: 321nimda)
-        router.attach("/Reset", Reset.class);
 
-        //Authenticate the user
-        router.attach("/Login", Login.class);
-
-        //You should make these REST endpoints available to Admin users only (Users with the Admin role)
-        router.attach("/Admin/users", AddUser.class);
-        router.attach("/Admin/users/{username}", UserManager.class);
-        router.attach("/Admin/ActualTotalLoad", ImportActualTotalLoadDataSet.class);
-        //Add more datasets
-
-        //You should make these REST endpoints available to all authenticated users
-        router.attach("/Logout", Logout.class);
         /*
          All routes accept a `format` query param (optional, either json or csv, default is json)
          All year, month and date attributes in routes are in the ISO-8601 format
@@ -94,7 +82,25 @@ public class RestfulApp extends Application {
             ActualvsForecastForSpecificYear.class
         );
 
+//////////////////////////////////////////////////////////////////////////////////////
+        //Init a new (empty) database with the default Admin user (username: admin, password: 321nimda)
+        router.attach("/Reset", Reset.class);
 
+        //Authenticate the user
+        router.attach("/Login", Login.class);
+
+        //You should make these REST endpoints available to Admin users only (Users with the Admin role)
+        router.attach("/Admin/users", AddUser.class);
+        router.attach("/Admin/users/{username}", UserManager.class);
+        router.attach("/Admin/ActualTotalLoad", ImportActualTotalLoadDataSet.class);
+        router.attach("/Admin/AggregatedGenerationPerType", ImportAggregatedGenerationPerType.class);
+        router.attach("/Admin/DayAheadTotalLoadForecast", ImportDayAheadTotalLoad.class);
+        //Add more datasets
+
+        //You should make these REST endpoints available to all authenticated users
+        router.attach("/Logout", Logout.class);
+		
+		
         //Enable CORS for all origins (don't use this in a production service)
         CorsFilter corsFilter = new CorsFilter(getContext(), router);
         corsFilter.setAllowedOrigins(Set.of("*"));
@@ -104,8 +110,8 @@ public class RestfulApp extends Application {
         corsFilter.setAllowingAllRequestedHeaders(true);
         corsFilter.setSkippingResourceForCorsOptions(true);
         corsFilter.setMaxAge(10);
-        return corsFilter;
+		
+        return router;
     }
-
 
 }

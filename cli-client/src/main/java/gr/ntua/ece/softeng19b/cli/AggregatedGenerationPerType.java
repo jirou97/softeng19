@@ -93,6 +93,7 @@ public class AggregatedGenerationPerType extends EnergyCliArgs implements Callab
             cli.usage(cli.getOut());
             return 0;
         }
+        RestAPI Z = new RestAPI();
 
         try {
             if (!prodtypes.contains(productionType)){
@@ -104,9 +105,10 @@ public class AggregatedGenerationPerType extends EnergyCliArgs implements Callab
                 dateArgs.date = LocalDate.now().toString();
             }
             */
+            Z.setToken(Z.retrieveTokenFromFile());
             if (dateArgs.date != null ) {
 
-                List<AGPTRecordForSpecificDay> records = new RestAPI().
+                List<AGPTRecordForSpecificDay> records = Z.
                         getAggregatedGenerationPerType(areaName, timeres.name(),LocalDate.parse(dateArgs.date),productionType, format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -153,7 +155,7 @@ public class AggregatedGenerationPerType extends EnergyCliArgs implements Callab
                 return 0;
             }
             else if (dateArgs.month != null ) {
-                List<AGPTRecordForSpecificMonth> records = new RestAPI().
+                List<AGPTRecordForSpecificMonth> records = Z.
                         getAggregatedGenerationPerTypeForMonth(areaName, timeres.name(),LocalDate.parse(dateArgs.month+"-01"),productionType, format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -196,7 +198,7 @@ public class AggregatedGenerationPerType extends EnergyCliArgs implements Callab
                 return 0;
             }
             else if (dateArgs.year != null ) {
-                List<AGPTRecordForSpecificYear> records = new RestAPI().
+                List<AGPTRecordForSpecificYear> records = Z.
                         getAggregatedGenerationPerTypeForYear(areaName, timeres.name(),LocalDate.parse(dateArgs.year+"-01-01"),productionType, format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");

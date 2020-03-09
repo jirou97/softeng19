@@ -1,4 +1,5 @@
 package gr.ntua.ece.softeng19b.conf;
+import gr.ntua.ece.softeng19b.data.DataAccess;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -40,6 +41,11 @@ public class Listener implements ServletContextListener {
         catch(Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+        final DataAccess dataAccess = Configuration.getInstance().getDataAccess();
+        dataAccess.setAreaNamesATL();
+        dataAccess.setAreaNamesAGPT();
+        dataAccess.setAreaNamesDATL();
+        dataAccess.setProdTypes();
     }
 
     /**

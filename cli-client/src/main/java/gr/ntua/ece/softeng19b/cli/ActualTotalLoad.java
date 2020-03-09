@@ -1,4 +1,3 @@
-
 package gr.ntua.ece.softeng19b.cli;
 
 import gr.ntua.ece.softeng19b.client.RestAPI;
@@ -7,7 +6,8 @@ import gr.ntua.ece.softeng19b.data.model.ATLRecordForSpecificMonth;
 import gr.ntua.ece.softeng19b.data.model.ATLRecordForSpecificYear;
 
 import picocli.CommandLine;
-
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -27,11 +27,13 @@ public class ActualTotalLoad extends EnergyCliArgs implements Callable<Integer> 
             cli.usage(cli.getOut());
             return 0;
         }
+        RestAPI Z = new RestAPI();
 
         try {
+            
+            Z.setToken(Z.retrieveTokenFromFile());
             if (dateArgs.date != null ) {
-                List<ATLRecordForSpecificDay> records = new RestAPI().
-                        getActualTotalLoad(areaName, timeres.name(), LocalDate.parse(dateArgs.date), format);
+                List<ATLRecordForSpecificDay> records = Z.getActualTotalLoad(areaName, timeres.name(), LocalDate.parse(dateArgs.date), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
                 System.out.println("[");
@@ -75,7 +77,7 @@ public class ActualTotalLoad extends EnergyCliArgs implements Callable<Integer> 
                 return 0;
             }
             else if (dateArgs.month!=null) {
-                List<ATLRecordForSpecificMonth> records = new RestAPI().
+                List<ATLRecordForSpecificMonth> records = Z.
                                 getActualTotalLoadForMonth(areaName, timeres.name(), LocalDate.parse(dateArgs.month+"-01"), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -115,7 +117,7 @@ public class ActualTotalLoad extends EnergyCliArgs implements Callable<Integer> 
                 return 0;
             }
         else if (dateArgs.year!=null) {
-            List<ATLRecordForSpecificYear> records = new RestAPI().
+            List<ATLRecordForSpecificYear> records = Z.
                             getActualTotalLoadForYear(areaName, timeres.name(), LocalDate.parse(dateArgs.year+"-01-01"), format);
             // Do something with the records :)
             System.out.println("Fetched " + records.size() + " record(s)");

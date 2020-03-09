@@ -24,10 +24,14 @@ public class DayAheadTotalLoad extends EnergyCliArgs implements Callable<Integer
             cli.usage(cli.getOut());
             return 0;
         }
+        RestAPI Z = new RestAPI();
 
         try {
+            
+            Z.setToken(Z.retrieveTokenFromFile());
+
             if (dateArgs.date != null ) {
-                List<DATLFRecordForSpecificDay> records = new RestAPI().
+                List<DATLFRecordForSpecificDay> records = Z.
                         getDayAheadTotalLoad(areaName, timeres.name(), LocalDate.parse(dateArgs.date), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -71,7 +75,7 @@ public class DayAheadTotalLoad extends EnergyCliArgs implements Callable<Integer
                 return 0;
             }
             else if (dateArgs.month!=null) {
-                List<DATLFRecordForSpecificMonth> records = new RestAPI().
+                List<DATLFRecordForSpecificMonth> records = Z.
                                 getDayAheadTotalLoadForMonth(areaName, timeres.name(), LocalDate.parse(dateArgs.month+"-01"), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -111,7 +115,7 @@ public class DayAheadTotalLoad extends EnergyCliArgs implements Callable<Integer
                 return 0;
             }
         else if (dateArgs.year!=null) {
-            List<DATLFRecordForSpecificYear> records = new RestAPI().
+            List<DATLFRecordForSpecificYear> records = Z.
                             getDayAheadTotalLoadForYear(areaName, timeres.name(), LocalDate.parse(dateArgs.year+"-01-01"), format);
             // Do something with the records :)
             System.out.println("Fetched " + records.size() + " record(s)");

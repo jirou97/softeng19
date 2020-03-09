@@ -1,5 +1,5 @@
 package gr.ntua.ece.softeng19b.data.model;
-import java.sql.Date;
+//import java.sql.Date;
 
 public class AGPTRecordForSpecificDay extends AbstractEntsoeRecord {
 

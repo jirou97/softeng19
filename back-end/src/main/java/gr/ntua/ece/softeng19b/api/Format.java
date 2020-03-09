@@ -1,19 +1,9 @@
 package gr.ntua.ece.softeng19b.api;
 //import gr.ntua.ece.softeng19b.api.representation.JsonMapRepresentation;
+//import gr.ntua.ece.softeng19b.api.representation.JsonMapRepresentation;
 import gr.ntua.ece.softeng19b.api.representation.RepresentationGenerator;
-import gr.ntua.ece.softeng19b.data.ActualTotalLoadForSpecificDay;
-import gr.ntua.ece.softeng19b.data.ActualTotalLoadForMonth;
-import gr.ntua.ece.softeng19b.data.ActualTotalLoadForYear;
-import gr.ntua.ece.softeng19b.data.DayAheadTotalLoadForecastForDay;
-import gr.ntua.ece.softeng19b.data.DayAheadTotalLoadForecastForMonth;
-import gr.ntua.ece.softeng19b.data.DayAheadTotalLoadForecastForYear;
-import gr.ntua.ece.softeng19b.data.User;
-import gr.ntua.ece.softeng19b.data.AggregatedGenerationPerTypeForDay;
-import gr.ntua.ece.softeng19b.data.AggregatedGenerationPerTypeForMonth;
-import gr.ntua.ece.softeng19b.data.AggregatedGenerationPerTypeForYear;
-import gr.ntua.ece.softeng19b.data.ActualvsForecastForDay;
-import gr.ntua.ece.softeng19b.data.ActualvsForecastForMonth;
-import gr.ntua.ece.softeng19b.data.ActualvsForecastForYear;
+import gr.ntua.ece.softeng19b.data.model.*;
+//import gr.ntua.ece.softeng19b.data.model.User;
 
 import com.google.gson.stream.JsonWriter;
 //import gr.ntua.ece.softeng19b.api.representation.RepresentationGenerator;
@@ -33,24 +23,24 @@ import java.util.function.Consumer;
 public enum Format implements RepresentationGenerator {
     JSON {
         //TODO ADD EXCEPTIONS
-        public Representation generateRepresentation(List<ActualTotalLoadForSpecificDay> result) {
+        public Representation generateRepresentation(List<ATLRecordForSpecificDay> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(ActualTotalLoadForSpecificDay rec: result) {
+                    for(ATLRecordForSpecificDay rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
-                        w.name("DateTimeUTC").value(rec.getDateTimeUTC());
+                        w.name("DateTimeUTC").value(rec.getDateTime());
                         w.name("ActualTotalLoadValue").value(rec.getActualTotalLoadValue());
-                        w.name("UpdateTimeUTC").value(rec.getUpdateTimeUTC());
+                        w.name("UpdateTimeUTC").value(rec.getUpdateTime());
                         w.endObject(); // }
                         w.flush();
                     }
@@ -61,22 +51,22 @@ public enum Format implements RepresentationGenerator {
             });
         }
 
-        public Representation generateRepresentation1(List<ActualTotalLoadForMonth> result) {
+        public Representation generateRepresentation1(List<ATLRecordForSpecificMonth> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(ActualTotalLoadForMonth rec: result) {
+                    for(ATLRecordForSpecificMonth rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
-                        w.name("ActualTotalLoadValuePerDay").value(rec.getActualTotalLoadValue());
+                        w.name("ActualTotalLoadValuePerDay").value(rec.getActualTotalLoadByDayValue());
                         w.endObject(); // }
                         w.flush();
                     }
@@ -87,21 +77,21 @@ public enum Format implements RepresentationGenerator {
             });
         }
 
-        public Representation generateRepresentation2(List<ActualTotalLoadForYear> result) {
+        public Representation generateRepresentation2(List<ATLRecordForSpecificYear> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(ActualTotalLoadForYear rec: result) {
+                    for(ATLRecordForSpecificYear rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
-                        w.name("ActualTotalLoadValuePerMonth").value(rec.getActualTotalLoadValue());
+                        w.name("ActualTotalLoadValuePerMonth").value(rec.getActualTotalLoadByMonthValue());
                         w.endObject(); // }
                         w.flush();
                     }
@@ -111,24 +101,24 @@ public enum Format implements RepresentationGenerator {
                 }
             });
         }
-        public Representation generateRepresentation3(List<DayAheadTotalLoadForecastForDay> result) {
+        public Representation generateRepresentation3(List<DATLFRecordForSpecificDay> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(DayAheadTotalLoadForecastForDay rec: result) {
+                    for(DATLFRecordForSpecificDay rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
-                        w.name("DateTimeUTC").value(rec.getDateTimeUTC());
-                        w.name("DayAheadTotalLoadForecastValue").value(rec.getDayAheadTotalLoadForecast());
-                        w.name("UpdateTimeUTC").value(rec.getUpdateTimeUTC());
+                        w.name("DateTimeUTC").value(rec.getDateTime());
+                        w.name("DayAheadTotalLoadForecastValue").value(rec.getdayAheadTotalLoadForecast());
+                        w.name("UpdateTimeUTC").value(rec.getUpDateTime());
                         w.endObject(); // }
                         w.flush();
                     }
@@ -138,22 +128,22 @@ public enum Format implements RepresentationGenerator {
                 }
             });
         }
-        public Representation generateRepresentation4(List<DayAheadTotalLoadForecastForMonth> result) {
+        public Representation generateRepresentation4(List<DATLFRecordForSpecificMonth> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(DayAheadTotalLoadForecastForMonth rec: result) {
+                    for(DATLFRecordForSpecificMonth rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
-                        w.name("DayAheadTotalLoadForecastValuePerDay").value(rec.getDayAheadTotalLoadForecast());
+                        w.name("DayAheadTotalLoadForecastValuePerDay").value(rec.getdayAheadTotalLoadForecast());
 
                         w.endObject(); // }
                         w.flush();
@@ -165,21 +155,21 @@ public enum Format implements RepresentationGenerator {
             });
         }
 
-        public Representation generateRepresentation5(List<DayAheadTotalLoadForecastForYear> result) {
+        public Representation generateRepresentation5(List<DATLFRecordForSpecificYear> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(DayAheadTotalLoadForecastForYear rec: result) {
+                    for(DATLFRecordForSpecificYear rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
-                        w.name("DayAheadTotalLoadForecastValuePerMonth").value(rec.getDayAheadTotalLoadForecast());
+                        w.name("DayAheadTotalLoadForecastValuePerMonth").value(rec.getdayAheadTotalLoadForecast());
 
                         w.endObject(); // }
                         w.flush();
@@ -190,25 +180,25 @@ public enum Format implements RepresentationGenerator {
                 }
             });
         }
-        public Representation generateRepresentation6(List<AggregatedGenerationPerTypeForDay> result) {
+        public Representation generateRepresentation6(List<AGPTRecordForSpecificDay> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(AggregatedGenerationPerTypeForDay rec: result) {
+                    for(AGPTRecordForSpecificDay rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
-                        w.name("DateTimeUTC").value(rec.getDateTimeUTC());
+                        w.name("DateTimeUTC").value(rec.getDateTime());
                         w.name("ProductionType").value(rec.getproductionTypeCodeText());
                         w.name("ActualGenerationOutputValue").value(rec.getActualGenerationOutputValue());
-                        w.name("UpdateTimeUTC").value(rec.getUpdateTimeUTC());
+                        w.name("UpdateTimeUTC").value(rec.getUpDateTime());
                         w.endObject(); // }
                         w.flush();
                     }
@@ -219,18 +209,18 @@ public enum Format implements RepresentationGenerator {
             });
         }
         
-        public Representation generateRepresentation7(List<AggregatedGenerationPerTypeForMonth> result) {
+        public Representation generateRepresentation7(List<AGPTRecordForSpecificMonth> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(AggregatedGenerationPerTypeForMonth rec: result) {
+                    for(AGPTRecordForSpecificMonth rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("Day").value(rec.getDay());
@@ -247,18 +237,18 @@ public enum Format implements RepresentationGenerator {
             });
         }
 
-        public Representation generateRepresentation8(List<AggregatedGenerationPerTypeForYear> result) {
+        public Representation generateRepresentation8(List<AGPTRecordForSpecificYear> result) {
             return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(AggregatedGenerationPerTypeForYear rec: result) {
+                    for(AGPTRecordForSpecificYear rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
                         w.name("ProductionType").value(rec.getproductionTypeCodeText());
@@ -273,22 +263,22 @@ public enum Format implements RepresentationGenerator {
                 }
             });
         }
-            public Representation generateRepresentation9(List<ActualvsForecastForDay> result) {
+            public Representation generateRepresentation9(List<AvFRecordForSpecificDay> result) {
                 return new CustomJsonRepresentation( (JsonWriter w) -> {
                     try {
                         w.beginArray(); // [
-                        for(ActualvsForecastForDay rec: result) {
+                        for(AvFRecordForSpecificDay rec: result) {
                             w.beginObject(); // {
                             w.name("Source").value(rec.getSource());
-                            w.name("DataSet").value(rec.getDataset());
+                            w.name("DataSet").value(rec.getDataSet());
                             w.name("AreaName").value(rec.getAreaName());
-                            w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                            w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                             w.name("MapCode").value(rec.getMapCode());
-                            w.name("ResolutionCode").value(rec.getResolutionText());
+                            w.name("ResolutionCode").value(rec.getResolutionCode());
                             w.name("Year").value(rec.getYear());
                             w.name("Month").value(rec.getMonth());
                             w.name("Day").value(rec.getDay());
-                            w.name("DateTimeUTC").value(rec.getDateTimeUTC());
+                            w.name("DateTimeUTC").value(rec.getDateTime());
                             w.name("DayAheadTotalLoadForecastValue").value(rec.getDayAheadTotalLoadForecastValue());
                             w.name("ActualTotalLoadValue").value(rec.getActualTotalLoadValue());
                             
@@ -302,23 +292,23 @@ public enum Format implements RepresentationGenerator {
                     }
                 });
             }
-            public Representation generateRepresentation10(List<ActualvsForecastForMonth> result) {
+            public Representation generateRepresentation10(List<AvFRecordForSpecificMonth> result) {
                 return new CustomJsonRepresentation( (JsonWriter w) -> {
                     try {
                         w.beginArray(); // [
-                        for(ActualvsForecastForMonth rec: result) {
+                        for(AvFRecordForSpecificMonth rec: result) {
                             w.beginObject(); // {
                             w.name("Source").value(rec.getSource());
-                            w.name("DataSet").value(rec.getDataset());
+                            w.name("DataSet").value(rec.getDataSet());
                             w.name("AreaName").value(rec.getAreaName());
-                            w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                            w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                             w.name("MapCode").value(rec.getMapCode());
-                            w.name("ResolutionCode").value(rec.getResolutionText());
+                            w.name("ResolutionCode").value(rec.getResolutionCode());
                             w.name("Year").value(rec.getYear());
                             w.name("Month").value(rec.getMonth());
                             w.name("Day").value(rec.getDay());
-                            w.name("DayAheadTotalLoadForecastByDayValue").value(rec.getDayAheadTotalLoadForecastByDayValue());
-                            w.name("ActualTotalLoadByDayValue").value(rec.getActualTotalLoadByDayValue());
+                            w.name("DayAheadTotalLoadForecastByDayValue").value(rec.getDayAheadTotalLoadForecastValue());
+                            w.name("ActualTotalLoadByDayValue").value(rec.getActualTotalLoadValue());
                             
                             w.endObject(); // }
                             w.flush();
@@ -329,21 +319,21 @@ public enum Format implements RepresentationGenerator {
                     }
                 });
             }
-            public Representation generateRepresentation11(List<ActualvsForecastForYear> result) {return new CustomJsonRepresentation( (JsonWriter w) -> {
+            public Representation generateRepresentation11(List<AvFRecordForSpecificYear> result) {return new CustomJsonRepresentation( (JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(ActualvsForecastForYear rec: result) {
+                    for(AvFRecordForSpecificYear rec: result) {
                         w.beginObject(); // {
                         w.name("Source").value(rec.getSource());
-                        w.name("DataSet").value(rec.getDataset());
+                        w.name("DataSet").value(rec.getDataSet());
                         w.name("AreaName").value(rec.getAreaName());
-                        w.name("AreaTypeCode").value(rec.getAreaTypeCodeText());
+                        w.name("AreaTypeCode").value(rec.getAreaTypeCode());
                         w.name("MapCode").value(rec.getMapCode());
-                        w.name("ResolutionCode").value(rec.getResolutionText());
+                        w.name("ResolutionCode").value(rec.getResolutionCode());
                         w.name("Year").value(rec.getYear());
                         w.name("Month").value(rec.getMonth());
-                        w.name("DayAheadTotalLoadForecastByMonthValue").value(rec.getDayAheadTotalLoadForecastByMonthValue());
-                        w.name("ActualTotalLoadByMonthValue").value(rec.getActualTotalLoadByMonthValue());
+                        w.name("DayAheadTotalLoadForecastByMonthValue").value(rec.getDayAheadTotalLoadForecastValue());
+                        w.name("ActualTotalLoadByMonthValue").value(rec.getActualTotalLoadValue());
                         
                         w.endObject(); // }
                         w.flush();
@@ -353,76 +343,50 @@ public enum Format implements RepresentationGenerator {
                     throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
                 }
             });
-            }
 
-            public Representation generateRepresentationUser(List<User> result) {
-                return new CustomJsonRepresentation( (JsonWriter w) -> {
-                    try {
-                        w.beginArray(); // [
-                        for(User rec: result) {
-                            w.beginObject(); // {
-                            w.name("Username").value(rec.getUsername());
-                            w.name("Email").value(rec.getEmail());
-                            w.name("Quotas").value(rec.getRequestsPerDayQuota());
-                            w.endObject(); // }
-                            w.flush();
-                        }
-                        w.endArray(); // ]
-                    } catch (IOException e) {
-                        throw new ResourceException(Status.SERVER_ERROR_INTERNAL);
-                    }
-                });
-            }
-
-
-
-
-        
+            }        
 
     },
     CSV {
-        public Representation generateRepresentation(List<ActualTotalLoadForSpecificDay> result) {
+        public Representation generateRepresentation(List<ATLRecordForSpecificDay> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation1(List<ActualTotalLoadForMonth> result) {
+        public Representation generateRepresentation1(List<ATLRecordForSpecificMonth> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation2(List<ActualTotalLoadForYear> result) {
+        public Representation generateRepresentation2(List<ATLRecordForSpecificYear> result) {
             throw new UnsupportedOperationException("Implement this");
         }
 
         
-        public Representation generateRepresentation3(List<DayAheadTotalLoadForecastForDay> result) {
+        public Representation generateRepresentation3(List<DATLFRecordForSpecificDay> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation4(List<DayAheadTotalLoadForecastForMonth> result) {
+        public Representation generateRepresentation4(List<DATLFRecordForSpecificMonth> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation5(List<DayAheadTotalLoadForecastForYear> result) {
-            throw new UnsupportedOperationException("Implement this");
-        }
-
-
-        public Representation generateRepresentation6(List<AggregatedGenerationPerTypeForDay> result) {
-            throw new UnsupportedOperationException("Implement this");
-        }
-        public Representation generateRepresentation7(List<AggregatedGenerationPerTypeForMonth> result) {
-            throw new UnsupportedOperationException("Implement this");
-        }
-        public Representation generateRepresentation8(List<AggregatedGenerationPerTypeForYear> result) {
+        public Representation generateRepresentation5(List<DATLFRecordForSpecificYear> result) {
             throw new UnsupportedOperationException("Implement this");
         }
 
-        public Representation generateRepresentation9(List<ActualvsForecastForDay> result) {
+
+        public Representation generateRepresentation6(List<AGPTRecordForSpecificDay> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation10(List<ActualvsForecastForMonth> result) {
+        public Representation generateRepresentation7(List<AGPTRecordForSpecificMonth> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentation11(List<ActualvsForecastForYear> result) {
+        public Representation generateRepresentation8(List<AGPTRecordForSpecificYear> result) {
             throw new UnsupportedOperationException("Implement this");
         }
-        public Representation generateRepresentationUser(List<User> result) {
+
+        public Representation generateRepresentation9(List<AvFRecordForSpecificDay> result) {
+            throw new UnsupportedOperationException("Implement this");
+        }
+        public Representation generateRepresentation10(List<AvFRecordForSpecificMonth> result) {
+            throw new UnsupportedOperationException("Implement this");
+        }
+        public Representation generateRepresentation11(List<AvFRecordForSpecificYear> result) {
             throw new UnsupportedOperationException("Implement this");
         }
 

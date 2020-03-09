@@ -1,4 +1,3 @@
-
 package gr.ntua.ece.softeng19b.cli;
 
 import gr.ntua.ece.softeng19b.client.RestAPI;
@@ -26,10 +25,11 @@ public class ActualvsForecast extends EnergyCliArgs implements Callable<Integer>
             cli.usage(cli.getOut());
             return 0;
         }
-
+        RestAPI Z = new RestAPI();
         try {
+            Z.setToken(Z.retrieveTokenFromFile());
             if (dateArgs.date != null ) {
-                List<AvFRecordForSpecificDay> records = new RestAPI().
+                List<AvFRecordForSpecificDay> records = Z.
                         getActualvsForecast(areaName, timeres.name(), LocalDate.parse(dateArgs.date), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -73,7 +73,7 @@ public class ActualvsForecast extends EnergyCliArgs implements Callable<Integer>
                 return 0;
             }
             else if (dateArgs.month!=null) {
-                List<AvFRecordForSpecificMonth> records = new RestAPI().
+                List<AvFRecordForSpecificMonth> records = Z.
                                 getActualvsForecastForMonth(areaName, timeres.name(), LocalDate.parse(dateArgs.month+"-01"), format);
                 // Do something with the records :)
                 System.out.println("Fetched " + records.size() + " records");
@@ -115,7 +115,7 @@ public class ActualvsForecast extends EnergyCliArgs implements Callable<Integer>
                 return 0;
             }
         else if (dateArgs.year!=null) {
-            List<AvFRecordForSpecificYear> records = new RestAPI().
+            List<AvFRecordForSpecificYear> records = Z.
                             getActualvsForecastForYear(areaName, timeres.name(), LocalDate.parse(dateArgs.year+"-01-01"), format);
             // Do something with the records :)
             System.out.println("Fetched " + records.size() + " record(s)");

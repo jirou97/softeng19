@@ -1,12 +1,14 @@
 package gr.ntua.ece.softeng19b.api.representation;
 
 import com.google.gson.Gson;
+
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
+//import java.util.List;
 
 /**
  * A generic json representation of a java.util.Map object.

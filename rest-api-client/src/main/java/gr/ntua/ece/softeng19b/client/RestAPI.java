@@ -1,8 +1,7 @@
 package gr.ntua.ece.softeng19b.client;
 
+//import gr.ntua.ece.softeng19b.data.model.User;
 import gr.ntua.ece.softeng19b.data.model.*;
-import gr.ntua.ece.softeng19b.data.model.User;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -45,7 +44,9 @@ public class RestAPI {
     public RestAPI() throws RuntimeException {
         this("localhost", 8765);
     }
-
+    public void setToken(String token){
+        this.token = token ;
+    }
     public RestAPI(String host, int port) throws RuntimeException {
         try {
             this.client = newHttpClient();
@@ -54,6 +55,18 @@ public class RestAPI {
             throw new RuntimeException(e.getMessage());
         }
         this.urlPrefix = "https://" + host + ":" + port + BASE_URL;
+    }
+
+    public String retrieveTokenFromFile(){
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader("C:\\Users\\user\\Desktop\\2.0TL19-25-our-master\\cli-client\\src\\main\\java\\gr\\ntua\\ece\\softeng19b\\cli\\softeng19bAPI.token"));
+            String temp = brTest.readLine().replace("\n","");
+            brTest.close();
+            return temp;
+        }
+        catch (Exception e){
+            return "-1";
+        }
     }
 
     String urlForActualDataLoad(String areaName, String resolutionCode, LocalDate date, Format format) {
@@ -157,6 +170,7 @@ public class RestAPI {
     String urlForAddUser() { return urlPrefix + "/Admin/users"; }
 
     String urlForUpdateUser(String username) {
+        //System.out.println("AAAAAAA");
         return urlPrefix + "/Admin/users/" + URLEncoder.encode(username, StandardCharsets.UTF_8);
     }
 
@@ -177,6 +191,8 @@ public class RestAPI {
     }
 
     private HttpRequest newPutRequest(String url, String contentType, HttpRequest.BodyPublisher bodyPublisher) {
+        
+        //System.out.println("AAAAAAA");
         return newRequest("PUT", url, contentType, bodyPublisher);
     }
 
@@ -242,14 +258,27 @@ public class RestAPI {
         );
     }
 
-    public void login(String username, String password) {
+    public String login(String username, String password) {
         Map<String, String> formData = new LinkedHashMap<>();
         formData.put("username", username);
-        formData.put("password", password);
+        if (username.equals("admin")){
+            formData.put("password", password);
+        }
+        else {
+            try{
+                TrippleDes encrypt = new TrippleDes();
+                String encryptedPassword  = encrypt.encrypt(password);
+                formData.put("password", encryptedPassword);
+            }
+            catch(Exception e) {
+            }        
+        }
         token = sendRequestAndParseResponseBodyAsUTF8Text(
             () -> newPostRequest(urlForLogin(), URL_ENCODED, ofUrlEncodedFormData(formData)),
             ClientHelper::parseJsonToken
         );
+        return token;
+        
     }
 
     public void logout() {
@@ -264,7 +293,13 @@ public class RestAPI {
         Map<String, String> formData = new LinkedHashMap<>();
         formData.put("username", username);
         formData.put("email", email);
-        formData.put("password", password);
+        try{
+            TrippleDes encrypt = new TrippleDes();
+            String encryptedPassword  = encrypt.encrypt(password);
+            formData.put("password", encryptedPassword);
+        }
+        catch(Exception e) {
+        }        
         formData.put("requestsPerDayQuota", String.valueOf(quota));
         return sendRequestAndParseResponseBodyAsUTF8Text(
             () -> newPostRequest(urlForAddUser(), URL_ENCODED, ofUrlEncodedFormData(formData)),
@@ -272,16 +307,16 @@ public class RestAPI {
         );
     }
 
-    public User updateUser(User updatedUser) {
-        //only email and/or quota can be updated
+    public User updateUser(User upUser) {
         Map<String, String> formData = new LinkedHashMap<>();
-        formData.put("email", updatedUser.getEmail());
-        formData.put("requestsPerDayQuota", String.valueOf(updatedUser.getRequestsPerDayQuota()));
+        formData.put("email", upUser.getEmail());
+        formData.put("requestsPerDayQuota", String.valueOf(upUser.getRequestsPerDayQuota()));
         return sendRequestAndParseResponseBodyAsUTF8Text(
-            () -> newPutRequest(urlForUpdateUser(updatedUser.getUsername()), URL_ENCODED, ofUrlEncodedFormData(formData)),
+            () -> newPutRequest(urlForUpdateUser(upUser.getUsername()), URL_ENCODED, ofUrlEncodedFormData(formData)),
             ClientHelper::parseJsonUser
         );
     }
+        
 
     public User getUser(String username) {
         return sendRequestAndParseResponseBodyAsUTF8Text(
@@ -300,12 +335,10 @@ public class RestAPI {
             ClientHelper::parseJsonImportResult
         );
     }
-
-
     public List<ATLRecordForSpecificDay> getActualTotalLoad(String areaName,
                                                             String resolutionCode,
                                                             LocalDate date,
-                                                            Format format) {
+                                                            Format format) {                                                        
         return sendRequestAndParseResponseBodyAsUTF8Text(
             () -> newGetRequest(urlForActualDataLoad(areaName, resolutionCode, date, format)),
             format::consumeActualTotalLoadRecordsForSpecificDay
@@ -331,6 +364,7 @@ public class RestAPI {
             format::consumeActualTotalLoadRecordsForSpecificYear
         );
     }
+
 
 
     public List<AGPTRecordForSpecificDay> getAggregatedGenerationPerType(String areaName,

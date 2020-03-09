@@ -29,8 +29,8 @@ class RestAPISpecification extends Specification {
     "Source": "entso-e",
     "DataSet": "ActualTotalLoad",
     "AreaName": "Greece",
-    "AreaTypeCode": "GR",
-    "MapCode": "Foo",
+    "AreaTypeCode": "BZN",
+    "MapCode": "GR",
     "ResolutionCode": "PT60M",
     "Year": 2000,
     "Month": 1,
@@ -46,8 +46,8 @@ class RestAPISpecification extends Specification {
     "Source": "entso-e",
     "DataSet": "ActualTotalLoad",
     "AreaName": "Greece",
-    "AreaTypeCode": "GR",
-    "MapCode": "Foo",
+    "AreaTypeCode": "BZN",
+    "MapCode": "GR",
     "ResolutionCode": "PT60M",
     "Year": 2000,
     "Month": 1,
@@ -70,7 +70,7 @@ class RestAPISpecification extends Specification {
         wms.stop()
     }
 
-    def "T01. Health check status is OK"() {
+    def "T01. Rest Health check status is OK"() {
         given:
         wms.givenThat(
             get(
@@ -86,8 +86,8 @@ class RestAPISpecification extends Specification {
         then:
         status == "OK"
     }
-
-    def "T02. The database is reset successfully"() {
+    
+    def "T02. Rest The database is reset successfully"() {
         given:
         wms.givenThat(
             post(
@@ -103,8 +103,8 @@ class RestAPISpecification extends Specification {
         then:
         status == "OK"
     }
-
-    def "T03. Admin logs in successfully"() {
+    
+    def "T03. Rest Admin logs in successfully"() {
         given:
         wms.givenThat(
             post(
@@ -122,8 +122,7 @@ class RestAPISpecification extends Specification {
         then:
         caller1.isLoggedIn()
     }
-
-    def "T04. Admin creates a new user"() {
+    def "T04. Rest Admin creates a new user"() {
         given:
         wms.givenThat(
             post(
@@ -131,8 +130,8 @@ class RestAPISpecification extends Specification {
             ).withHeader(
                 RestAPI.CUSTOM_HEADER, equalTo(TOKEN1)
             )
-            .withRequestBody(
-                equalTo(ClientHelper.encode([username:"user", email:"user@ntua.gr", password:"4321resu", requestsPerDayQuota:"100"]))
+            .withRequestBody(                                                       //encrypted password
+                equalTo(ClientHelper.encode([username:"user", email:"user@ntua.gr", password:"6UQUYJn6pxE9cZdBbo33Tg==", requestsPerDayQuota:"100"]))
             ).willReturn(
                 okJson('{"username":"user", "email":"user@ntua.gr","requestsPerDayQuota":100}')
             )
@@ -147,13 +146,14 @@ class RestAPISpecification extends Specification {
         user.getRequestsPerDayQuota() == 100
     }
 
-    def "T05. User logs in"() {
+    
+    def "T05. Rest User logs in"() {
         given:
         wms.givenThat(
             post(
                 urlEqualTo("/energy/api/Login")
             ).withRequestBody(
-                equalTo(ClientHelper.encode([username:"user", password:"4321resu"]))
+                equalTo(ClientHelper.encode([username:"user", password:"6UQUYJn6pxE9cZdBbo33Tg=="]))
             ).willReturn(
                 okJson("""{"token":"${TOKEN2}"}""")
             )
@@ -166,7 +166,7 @@ class RestAPISpecification extends Specification {
         caller2.isLoggedIn()
     }
 
-    def "T06. User retrieves ActualTotalLoad tuple for 2000-01-01"() {
+    def "T06. RestUser retrieves ActualTotalLoad tuple for 2000-01-01"() {
         given:
         wms.givenThat(
             get(
@@ -190,7 +190,7 @@ class RestAPISpecification extends Specification {
         records.size() == 1
     }
 
-    def "T07. Admin limits the quota of the new user"() {
+    def "T07. Rest Admin limits the quota of the new user"() {
         given:
         wms.givenThat(
             put(
@@ -211,7 +211,7 @@ class RestAPISpecification extends Specification {
         user.getRequestsPerDayQuota() == 1
     }
 
-    def "T08. User cannot read ActualTotalLoad tuple for 2000-01-02 due to quota limit"() {
+    def "T08. Rest User cannot read ActualTotalLoad tuple for 2000-01-02 due to quota limit"() {
         given:
         wms.givenThat(
             get(
@@ -235,8 +235,9 @@ class RestAPISpecification extends Specification {
         ServerResponseException exception = thrown()
         exception.getStatusCode() == 402
     }
+    
 
-    def "T09. Admin updates the quota of the new user again"() {
+    def "T09. Rest Admin updates the quota of the new user again"() {
         given:
         wms.givenThat(
             put(
@@ -257,7 +258,7 @@ class RestAPISpecification extends Specification {
         user.getRequestsPerDayQuota() == 10
     }
 
-    def "T10. Admin logs out"() {
+    def "T10. Rest Admins logs out"() {
         given:
         wms.givenThat(
             post(
@@ -274,7 +275,7 @@ class RestAPISpecification extends Specification {
         !caller1.isLoggedIn()
     }
 
-    def "T11. User retrieves ActualTotalLoad tuple for 2000-01-02"() {
+    def "T11. Rest User retrieves ActualTotalLoad tuple for 2000-01-02"() {
         given:
         wms.givenThat(
             get(
@@ -298,7 +299,7 @@ class RestAPISpecification extends Specification {
         records.size() == 1
     }
 
-    def "T12. User uploads an ActualTotalLoad dataset"() {
+    def "T12. Rest User uploads an ActualTotalLoad dataset"() {
         given:
         String csv = Paths.get(getClass().getResource("/test-atl.csv").toURI()).toString()
         wms.givenThat(
@@ -328,7 +329,7 @@ class RestAPISpecification extends Specification {
         importResult.totalRecordsInDatabase == 4 //2 (csv) + 2 (2000-01-XX test data)
     }
 
-    def "T13. User logs out"() {
+    def "T13. Rest User logs out"() {
         given:
         wms.givenThat(
             post(
@@ -345,11 +346,11 @@ class RestAPISpecification extends Specification {
         !caller2.isLoggedIn()
     }
 
-    def "T14. Anonymous users cannot access protected resources"() {
+    def "T14. Rest Anonymous users cannot access protected resources"() {
         given:
         wms.givenThat(
             get(
-                urlEqualTo("/energy/api/ActualTotalLoad/Greece/PT60M/date/2000-01-02?format=json")
+                urlEqualTo("/energy/api/ActualTotalLoad/Greece/PT60M/date/2000-01-01?format=json")
             ).willReturn(
                 aResponse().withStatus(401)
             )
@@ -359,7 +360,7 @@ class RestAPISpecification extends Specification {
         caller2.getActualTotalLoad(
             "Greece",
             "PT60M",
-            LocalDate.of(2000, 1, 2),
+            LocalDate.of(2000, 1, 1),
             Format.JSON
         )
 
@@ -367,5 +368,6 @@ class RestAPISpecification extends Specification {
         ServerResponseException exception = thrown()
         exception.getStatusCode() == 401
     }
+    
 
 }

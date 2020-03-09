@@ -23,4 +23,5 @@ public interface ResponseBodyProcessor {
     List<AvFRecordForSpecificMonth> consumeActualvsForecastRecordsForSpecificMonth(Reader reader);
     List<AvFRecordForSpecificYear> consumeActualvsForecastRecordsForSpecificYear(Reader reader);
 
+
 }

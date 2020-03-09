@@ -21,7 +21,13 @@ import static picocli.CommandLine.*;
     subcommands = {
         HealthCheck.class,
         ActualTotalLoad.class,
-        AggregatedGenerationPerType.class
+        AggregatedGenerationPerType.class,
+        ActualvsForecast.class,
+        DayAheadTotalLoad.class,
+        Login.class,
+        Logout.class,
+        Admin.class,
+        Reset.class
     }
 )
 public class App implements Callable<Integer> {
