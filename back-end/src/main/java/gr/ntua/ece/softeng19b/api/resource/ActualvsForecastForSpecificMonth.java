@@ -99,6 +99,9 @@ public class ActualvsForecastForSpecificMonth extends EnergyResource {
                     resolution,
                     date
             );
+            if ( result.size() == 0){
+                throw new ResourceException(new Status(403),"No data fetched in this call.",null );
+        }
             return format.generateRepresentation10(result);
         } catch (Exception e) {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, e.getMessage(), e);

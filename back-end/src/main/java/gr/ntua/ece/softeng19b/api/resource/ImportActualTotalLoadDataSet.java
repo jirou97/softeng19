@@ -85,7 +85,7 @@ public class ImportActualTotalLoadDataSet extends EnergyResource {
                                 sb.append(toAdd);
                             }
                             String[] toPasss = sb.toString().split("\n");
-                            String toPass = toPasss[0];
+                            //String toPass = toPasss[0];
                             File file = new File("C:" + File.separator + "Users" + File.separator + "user" + File.separator + "Desktop" + File.separator + "2.0TL19-25-our-master" + File.separator + "back-end" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "gr" + File.separator + "ntua" + File.separator + "ece" + File.separator + "softeng19b" + File.separator + "api" + File.separator + "resource" + File.separator + "temp.csv");
                             file.getParentFile().mkdirs(); 
                             if(!file.exists()) file.createNewFile();

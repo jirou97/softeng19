@@ -346,7 +346,7 @@ class FunctionalTest extends Specification{
         )
 
         expect:
-        records.size() == 1
+        records.size() == 10
     }
 
     def "T26. User retrieves ForecastvsActual tuple for 2018 for Greece"() {

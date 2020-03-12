@@ -6,8 +6,6 @@ import gr.ntua.ece.softeng19b.data.model.ATLRecordForSpecificMonth;
 import gr.ntua.ece.softeng19b.data.model.ATLRecordForSpecificYear;
 
 import picocli.CommandLine;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.Callable;

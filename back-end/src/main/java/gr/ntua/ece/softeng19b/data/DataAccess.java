@@ -322,8 +322,7 @@ public class DataAccess {
                           " from actualtotalload INNER JOIN  areatypecode ON ( actualtotalload.AreaTypeCodeId = areatypecode.Id ) INNER JOIN  mapcode ON ( actualtotalload.MapCodeId = mapcode.Id ) INNER JOIN  resolutioncode ON ( actualtotalload.ResolutionCodeId = resolutioncode.Id )  " +
                           " INNER JOIN  allocatedeicdetail ON ( actualtotalload.AreaCodeId = allocatedeicdetail.Id ) " +
                           " where AreaName = ? and ResolutionCodeText = ? and Year = ? and Month = ? and Day = ?"+
-                          " order by DateTime " +
-                          " LIMIT 24";
+                          " order by DateTime " ;
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -368,8 +367,7 @@ public class DataAccess {
                           " from actualtotalload INNER JOIN  areatypecode ON ( actualtotalload.AreaTypeCodeId = areatypecode.Id )  INNER JOIN  allocatedeicdetail ON ( actualtotalload.AreaCodeId = allocatedeicdetail.Id ) INNER JOIN  mapcode ON ( actualtotalload.MapCodeId = mapcode.Id ) INNER JOIN  resolutioncode ON ( actualtotalload.ResolutionCodeId = resolutioncode.Id )  " +
                           " group by AreaName, ResolutionCodeText, Year , Month , Day" +
                           " having AreaName = ? and ResolutionCodeText = ? and Year = ? and Month = ?  "+
-                          " order by Day " +
-                          " limit 31";
+                          " order by Day ";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -458,8 +456,7 @@ public class DataAccess {
                             " INNER JOIN  allocatedeicdetail ON ( dayaheadtotalloadforecast.AreaCodeId = allocatedeicdetail.Id ) " +
                             " group by AreaName, ResolutionCodeText, Year , Month , Day" +
                             " having AreaName = ? and ResolutionCodeText = ? and Year = ? and Month = ?  "+
-                            " order by Day" +
-                            " limit 31";
+                            " order by Day";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -546,8 +543,7 @@ public class DataAccess {
                             " from dayaheadtotalloadforecast INNER JOIN  areatypecode ON ( dayaheadtotalloadforecast.AreaTypeCodeId = areatypecode.Id ) INNER JOIN  mapcode ON ( dayaheadtotalloadforecast.MapCodeId = mapcode.Id ) INNER JOIN  resolutioncode ON ( dayaheadtotalloadforecast.ResolutionCodeId = resolutioncode.Id )  " +
                             " INNER JOIN  allocatedeicdetail ON ( dayaheadtotalloadforecast.AreaCodeId = allocatedeicdetail.Id ) " +
                             " where AreaName = ? and ResolutionCodeText = ? and Year = ? and Month = ? and Day = ?"+
-                            " order by DateTime"+
-                            " LIMIT 24";
+                            " order by DateTime";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -887,8 +883,7 @@ public class DataAccess {
                           " INNER JOIN  mapcode ON ( actualtotalload.MapCodeId = mapcode.Id )  " +
                           " INNER JOIN  resolutioncode ON ( actualtotalload.ResolutionCodeId = resolutioncode.Id )  " +
                           " where actualtotalload.AreaName = ? and ResolutionCodeText = ? and actualtotalload.Year = ? and actualtotalload.Month = ? and actualtotalload.Day = ?"+
-                          " order by actualtotalload.DateTime "+
-                          " LIMIT 24";
+                          " order by actualtotalload.DateTime ";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -942,8 +937,7 @@ public class DataAccess {
                           " INNER JOIN  resolutioncode ON ( actualtotalload.ResolutionCodeId = resolutioncode.Id )  " +
                           " where actualtotalload.AreaName = ? and ResolutionCodeText = ? and actualtotalload.Year = ? and actualtotalload.Month = ? "+
                           " GROUP BY actualtotalload.Day " +
-                          " order by actualtotalload.Day "+
-                          " LIMIT 31";
+                          " order by actualtotalload.Day ";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {
@@ -993,8 +987,7 @@ public class DataAccess {
                           " INNER JOIN  resolutioncode ON ( actualtotalload.ResolutionCodeId = resolutioncode.Id )  " +
                           " where actualtotalload.AreaName = ? and ResolutionCodeText = ? and actualtotalload.Year = ?  "+
                           " GROUP BY actualtotalload.Month " +
-                          " order by actualtotalload.Month " +
-                          " LIMIT 12";
+                          " order by actualtotalload.Month ";
         
         try {
             return jdbcTemplate.query(sqlQuery, sqlParams, (ResultSet rs, int rowNum) -> {

@@ -10,6 +10,10 @@ import java.util.concurrent.Callable;
 import static picocli.CommandLine.Command;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -35,7 +39,7 @@ public class Login extends UserCliArgs implements Callable<Integer> {
                 appendToFile(token);
             }
             catch(Exception e){
-                throw new IOException("File not found, fix this");
+                throw new IOException("Existing user");
             }
             System.out.println("    {") ;
             System.out.print("        token") ;
@@ -60,9 +64,53 @@ public class Login extends UserCliArgs implements Callable<Integer> {
 		printWriter.close();
 		*/
 		try {
+            countLinesNew("C:\\Users\\user\\Desktop\\2.0TL19-25-our-master\\cli-client\\src\\main\\java\\gr\\ntua\\ece\\softeng19b\\cli\\softeng19bAPI.token");
 			Files.write(Paths.get("C:\\Users\\user\\Desktop\\2.0TL19-25-our-master\\cli-client\\src\\main\\java\\gr\\ntua\\ece\\softeng19b\\cli\\softeng19bAPI.token"), (token+"\n").getBytes(), StandardOpenOption.APPEND);
 		}catch (IOException e) {
 			throw new IOException("File not found, fix this");
 		}
-	}
+    }
+    
+    public static int countLinesNew(String filename) throws IOException {
+        InputStream is = new BufferedInputStream(new FileInputStream(filename));
+        try {
+            byte[] c = new byte[1024];
+    
+            int readChars = is.read(c);
+            if (readChars == -1) {
+                // bail out if nothing to read
+                return 0;
+            }
+    
+            // make it easy for the optimizer to tune this loop
+            int count = 0;
+            while (readChars == 1024) {
+                for (int i=0; i<1024;) {
+                    if (c[i++] == '\n') {
+                        ++count;
+                    }
+                }
+                readChars = is.read(c);
+            }
+    
+            // count remaining characters
+            while (readChars != -1) {
+                System.out.println(readChars);
+                for (int i=0; i<readChars; ++i) {
+                    if (c[i] == '\n') {
+                        ++count;
+                    }
+                }
+                readChars = is.read(c);
+            }
+            if (count == 0 ){
+                return count;
+            }
+            else {
+                throw new IOException("Existing User");
+            }
+        } finally {
+            is.close();
+        }
+    }
 }
