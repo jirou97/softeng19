@@ -1,7 +1,7 @@
 # Project created for the Software Engineering class of ece NTUA 2019.
 
 ## Project
-This project concerns the management of open electricity market data in Europe from [transparency.entsoe.eu](transparency.entsoe.eu)
+This project concerns the management of open electricity market data in Europe from [transparency.entsoe.eu](https://transparency.entsoe.eu/)
 
 These data are essential to maintain transparency the functioning of the electricity market.
 
